@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+  <title>DL Music Generation</title>
+  <link rel="stylesheet" href="{% static 'lstm/css/home.css' %}" type="text/css">
+</head>
+<!-- <body style="background-image: url({% static '/lstm/images/home.png' %});"> -->
+<body>
+  <h1>Classical 846 LSTM</h1>
+  <h2>What is this?</h2>
+    <p>This is a webpage hosting some LSTM networks we trained to generate music. LSTM (Long-Short Term Memory) is a type of neural network that can learn temporal patterns. Thus, when trained on musical data belonging to an author, it is able to learn their style and generate new music.</p>
+    <p>I decided to develop this website because I was learning HTML, CSS and Django, and needed a fun project to do while doing so.</p>
+  <h2>How does it work?</h2>
+    <p>Easy! Click in one of the supported authors to access the network trained on this particular composer. Then, just choose a note or a sequence of notes as input, and see what comes out!</p>
+    <p>Some sample auto-generated tracks are also provided to let you have an idea of what might be generated.</p>
+  <h2>Reference Links</h2>
+  <ul>
+    <li><a href="https://github.com/PedroUria/DL-Music_Generation/blob/master/Final-Group-Presentation/Slides.pdf"  target="_blank">Slides</a></li>
+    <li><a href="https://github.com/PedroUria/DL-Music_Generation/blob/master/Final-Group-Project-Report/Music-LSTM.pdf"  target="_blank">Report</a></li>
+    <li><a href="https://github.com/PedroUria/DL-Music_Generation" target="_blank">GitHub</a></li>
+  </ul>
+  <h2>Trained LSTM Networks:</h2>
+  <ul>
+    {% for author in authors %}
+    <li><a href="/author/{{ author.pk }}/">{{ author.name }}</a></li>
+    <br>
+    {% endfor %}
+  </ul>
+</body>
+
+</html>

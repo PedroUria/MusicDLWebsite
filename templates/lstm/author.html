@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% load static %}
+  <title>{{ author.name }}</title>
+</head>
+<body>
+  <img src="{% static 'lstm/images/' %}{{ author.name }}.jpg" /> <br>
+  <form method="get">
+    {{ form }}
+    <button type="submit" class="btn btn-success">Submit</button>
+  </form>
+  {% if samples|length > 0 %}
+    {% if ".mp3" in samples.0 %}
+      <h2>Samples:</h2>
+        <ul>
+          {% for sample in samples %}
+            <li> <h3> {{ sample }}</h3><audio controls> <source src="{% static 'lstm/audio/' %}{{ sample }}" type="audio/mp3"> Audio not supported</audio></li><br>
+          {% endfor %}
+        </ul>
+    {% endif %}
+  {% else %}
+  <h2>No samples available</h2>
+  {% endif %}
+  <br>
+  <a href="/">Home</a>
+</body>
