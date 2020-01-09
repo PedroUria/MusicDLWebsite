@@ -2,38 +2,20 @@
 {% load static %}
 <html>
 <head>
-  <title>DL Music Generation - {{ author.name }}</title>
+  <title>DL Music Generation - {{ author.name }} - {{ trained_lstm_selected }}</title>
 </head>
 <!--<body style="background-image: url('{% static 'lstm/images/' %}{{ author.name }}_background.jpg')">-->
   <!--<img src="{% static 'lstm/images/' %}{{ author.name }}.jpg" /> <br>-->
 <body style="background-image: url('{% static 'lstm/images/author_background.jpeg' %}")>
-  <h1 style="font-family:Courier New;"> {{ author.name }} </h1>
-  <form method="get">
-    {{ form }}
-    <button type="submit" class="btn btn-success">Submit</button>
-  </form>
-  {% if samples|length > 0 %}
-    {% if ".mp3" in samples.0 %}
-      <h2 style="font-family:Courier New;">Samples:</h2>
-        <ul>
-          {% for sample in samples %}
-            <li> <h3 style="font-family:Courier New;"> {{ sample }}</h3><audio controls> <source src="{% static 'lstm/audio/' %}{{ sample }}" type="audio/mp3"> Audio not supported</audio></li><br>
-          {% endfor %}
-        </ul>
-      <h2 style="font-family:Courier New;">Generate:</h2>
-  <span style="font-family:Courier New;"> To generate, click <a href="/author/{{ author.pk }}/{{ lstm_selected }}/">here</a> </span>
-        <!--<form method="get">
-          {{ note_form }}
-          <button type="submit" class="btn btn-success">Submit</button>
-          {{ note_selected }}
-        </form>-->
+  <h1 style="font-family:Courier New;"> {{ author.name }} - {{ trained_lstm_selected }} </h1>
+  <h2 style="font-family:Courier New;">Generate:</h2>
+    <form method="get">
+      {{ form }}
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+    {% if note_selected|length > 0 %}
+        <span style="font-family:Courier New;">Success!</span>
     {% endif %}
-  {% else %}
-    <h2 style="font-family:Courier New;">No samples available :(</h2>
-      <h2 style="font-family:Courier New;">Generate:</h2>
-  <span style="font-family:Courier New;"> To generate, click <a href="/author/{{ author.pk }}/{{ lstm_selected }}/">here</a> </span>
-  {% endif %}
-  <br>
   <a href="/"><h3 style="font-family:Courier New;">Home</h3></a>
 </body>
 

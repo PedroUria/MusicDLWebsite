@@ -1,14 +1,21 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    {% load static %}
   <title>DL Music Generation</title>
-  <link rel="stylesheet" href="{% static 'lstm/css/home.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'lstm/css/home.css' %}">
 </head>
 <!-- <body style="background-image: url({% static '/lstm/images/home.png' %});"> -->
-<body>
-  <h1>Classical 846 LSTM</h1>
-  <h2>What is this?</h2>
+<body style="background-image: url('{% static 'lstm/images/home_backgroung.jpg' %}')">
+  <div class="container" style="position:relative; text-align: center;">
+    <img src="{% static 'lstm/images/home_title.jpg' %}" alt="Beautiful Piano" style="width:100%;">
+    <div class="text" style="position: absolute; top:10%; left:35%;"><h1 style="font-family:Courier New; font-size:xx-large;">Classical 846 LSTM.</h1></div>
+    <div class="text" style="position: absolute; top:20%; left:15%;"><h2 style="font-family:Courier New; display: inline-block; font-style:italic;">What is this?</h2><span style="font-family:Courier; font-style:italic; margin-left:15px;">This is a website hosting some LSTM networks we trained to generate music.</span></div>
+    <div class="text" style="position: absolute; top:60%; left:5%;"><h2 style="font-family:Courier New; display: inline-block; font-style:italic;">How does it work?</h2><span style="font-family:Courier; font-style:italic; margin-left:15px;">Easy! Scroll down and select a network trained on a particular composer.</span></div>
+    <div class="text" style="position: absolute; top:67%; left:5%;"><span style="font-family:Courier; font-style:italic;">Then, just choose a note or a sequence of notes as input, and see what comes out! You can also listen to some samples.</span></div>
+  </div>
+
+  <!--<h2>What is this?</h2>
     <p>This is a webpage hosting some LSTM networks we trained to generate music. LSTM (Long-Short Term Memory) is a type of neural network that can learn temporal patterns. Thus, when trained on musical data belonging to an author, it is able to learn their style and generate new music.</p>
     <p>I decided to develop this website because I was learning HTML, CSS and Django, and needed a fun project to do while doing so.</p>
   <h2>How does it work?</h2>
@@ -19,14 +26,26 @@
     <li><a href="https://github.com/PedroUria/DL-Music_Generation/blob/master/Final-Group-Presentation/Slides.pdf"  target="_blank">Slides</a></li>
     <li><a href="https://github.com/PedroUria/DL-Music_Generation/blob/master/Final-Group-Project-Report/Music-LSTM.pdf"  target="_blank">Report</a></li>
     <li><a href="https://github.com/PedroUria/DL-Music_Generation" target="_blank">GitHub</a></li>
-  </ul>
-  <h2>Trained LSTM Networks:</h2>
-  <ul>
-    {% for author in authors %}
-    <li><a href="/author/{{ author.pk }}/">{{ author.name }}</a></li>
-    <br>
-    {% endfor %}
-  </ul>
+  </ul>-->
+
+  <div>
+    <div class="thumbnail">
+      <div class="imgContainer" style="float:left;">
+        {% for author in authors %}
+          <a href="/author/{{ author.pk }}/"><!--{{ author.name }}--><img src="{% static 'lstm/images/' %}{{ author.name }}_thumbnail.jpg" /></a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+    <!--<ul>
+      {% for author in authors %}
+        <li><a href="/author/{{ author.pk }}/">{{ author.name }}><img src="{% static 'lstm/images/' %}{{ author.name }}_thumbnail.jpg" /></a></li>
+        <li><a href="/author/{{ author.pk }}/">{{ author.name }}</a></li>
+        <br>
+      {% endfor %}
+    </ul>-->
+
 </body>
 
 </html>

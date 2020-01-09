@@ -1,12 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 
 from .models import Author
-from .forms import LSTMForm
+from .forms import LSTMForm, InputNoteForm
 from django import forms
 
-from django.template import RequestContext
-
 import os
+from .utils_generate import generate_music
 
 
 def home(request):
@@ -19,6 +18,7 @@ def author(request, pk):
         samples = [sample for sample in os.listdir(os.getcwd() + "/static/lstm/audio") if
                    lstm_selected.replace("pkl", "mp3") in sample]
     except:
+        lstm_selected = ""
         samples = "No selection"
     author = get_object_or_404(Author, pk=pk)
     lstm_trained_choices = []
@@ -26,8 +26,19 @@ def author(request, pk):
         lstm_trained_choices.append((lstm_trained.lower(), lstm_trained))
     form = LSTMForm()
     form.fields["trained_lstm_selected"] = forms.CharField(label='Choose a trained model', widget=forms.Select(choices=lstm_trained_choices))
-    return render(request, 'author.html', {"author": author, "form": form, "samples": samples})
+    return render(request, 'author.html', {"author": author, "form": form, "samples": samples, "lstm_selected": lstm_selected})
 
+
+def author_generate(request, pk, trained_lstm_selected):
+    try:
+        note_selected = request.GET["input_note"]
+        generate_music(os.getcwd() + "/static/lstm/neuralnetworks/" + trained_lstm_selected, note_selected,
+                        os.getcwd() + "/static/lstm/generated_samples/" + trained_lstm_selected.replace(".pkl", "") + "_generated")
+    except Exception as e:
+        note_selected = ""  # str(e)
+    author = get_object_or_404(Author, pk=pk)
+    form = InputNoteForm()
+    return render(request, 'author_generate.html', {"author": author, "trained_lstm_selected": trained_lstm_selected, "note_selected": note_selected, "form": form})
 
 """from .models import LSTM, Samples
 

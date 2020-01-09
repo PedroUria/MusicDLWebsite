@@ -21,5 +21,6 @@ from lstm import views
 urlpatterns = [
     path('', views.home, name='home'),
     path("author/<str:pk>/", views.author, name="author"),
+    path("author/<str:pk>/<str:trained_lstm_selected>/", views.author_generate, name="author_generate"),
     path('admin/', admin.site.urls),
 ]
