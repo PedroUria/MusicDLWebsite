@@ -125,4 +125,20 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Deployment:  https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+
+from decouple import config, Csv
+import dj_database_url
+
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
+}
+
+STATIC_ROOT = "/static/"
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True

@@ -14,7 +14,8 @@
       <button type="submit" class="btn btn-success">Submit</button>
     </form>
     {% if note_selected|length > 0 %}
-        <span style="font-family:Courier New;">Success!</span>
+        <h3 style="font-family:Courier New;">Success!</h3>
+          <audio controls> <source src="{{ output_wav }}" type="audio/wav"> Audio not supported</audio>
     {% endif %}
   <a href="/"><h3 style="font-family:Courier New;">Home</h3></a>
 </body>
