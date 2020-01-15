@@ -1,8 +1,7 @@
 import numpy as np
 import torch
-import torch.nn as nn
 import music21 as ms
-from .utils_both_stacked import LSTMMusic, ltsm_gen, ltsm_gen_v2
+from .utils_both_stacked import LSTMMusic, ltsm_gen
 
 
 # notes_encoded = load("chopin", "prelude", 15, time_step=0.25)
@@ -10,7 +9,7 @@ from .utils_both_stacked import LSTMMusic, ltsm_gen, ltsm_gen_v2
 # net, l, ll = train_lstm_loss_whole_seq(50, n_epochs=100, lr=0.01)
 # To save the model
 # torch.save(net.state_dict(), 'chopin_both_stacked.pkl')
-def generate_music(trained_lstm, input_note, file_name):
+def generate_music(trained_lstm, input_notes_seq, file_name):
 
     # Gets a NumPy array with all the frequency of the piano notes
     notes_freq = [ms.note.Note(note).pitch.frequency for note in ["A0", "A#0"]]
@@ -19,16 +18,21 @@ def generate_music(trained_lstm, input_note, file_name):
         notes_freq += [ms.note.Note(note + str(i)).pitch.frequency for note in s]
     notes_freq.append(ms.note.Note("C8").pitch.frequency)
     notes_freq = np.array(notes_freq)
-    # Gets the note as a music21 object
-    note_dict = {"do": "C", "re": "D", "mi": "E", "fa": "F", "sol": "G", "la": "A", "si": "B"}
-    input_note_ms = ms.note.Note(note_dict[input_note])
-    input_note_np = np.zeros((1, 89))
-    input_note_np[0, :87] += (notes_freq == input_note_ms.pitch.frequency)*1
-    input_note_np_left = np.zeros((1, 89))
-    input_note_np = np.hstack((input_note_np_left, input_note_np))
+
+    input_notes = input_notes_seq.split("-")[:-1]
+    input_notes_np = np.zeros((len(input_notes), 89))
+    for i, input_note in enumerate(input_notes):
+        input_note = input_note.replace("s", "#")
+        input_note = input_note[1:] + input_note[0]
+        # Gets the note as a music21 object
+        input_note_ms = ms.note.Note(input_note)
+        input_notes_np[i, :87] += (notes_freq == input_note_ms.pitch.frequency)*1
+
+    input_notes_np_left = np.zeros((len(input_notes), 89))
+    input_notes_np = np.hstack((input_notes_np_left, input_notes_np))
 
     net = LSTMMusic(178, 178)
     net.load_state_dict(torch.load(trained_lstm, map_location=torch.device('cpu')))
     net.eval()
 
-    ltsm_gen_v2(net, 50, file_name, torch.tensor(input_note_np), time_step=0.25, n_steps=600)
+    ltsm_gen(net, 50, file_name, torch.tensor(input_notes_np), time_step=0.25, n_steps=600)

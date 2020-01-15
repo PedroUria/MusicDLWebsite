@@ -1,6 +1,9 @@
 # Django security
 .env
 
+# Python
+*__pycache__
+
 # Logs and databases #
 ######################
 *.log

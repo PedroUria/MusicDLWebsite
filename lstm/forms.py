@@ -22,3 +22,6 @@ class LSTMForm(forms.Form):
 
 class InputNoteForm(forms.Form):
     input_note = forms.CharField(label='Choose a note', widget=forms.Select(choices=NOTE_CHOICES))
+
+# class PianoKeyFrom(forms.Form):
+#     pressed_key = forms.

@@ -32,22 +32,26 @@ def author(request, pk):
 
 def author_generate(request, pk, trained_lstm_selected):
     try:
-        note_selected = request.GET["input_note"]
+        input_notes_seq = request.GET["submitted"]
         current_midi_and_wav_files = [file for file in os.listdir(os.getcwd() + "/static/lstm/generated_samples/") if ".mid" in file or ".wav" in file]
         for file in current_midi_and_wav_files:
             os.remove(os.getcwd() + "/static/lstm/generated_samples/" + file)
         output_file_name = os.getcwd() + "/static/lstm/generated_samples/" + trained_lstm_selected.replace(".pkl", "") + "_generated"
-        generate_music(os.getcwd() + "/static/lstm/neuralnetworks/" + trained_lstm_selected, note_selected, output_file_name)
+        generate_music(os.getcwd() + "/static/lstm/neuralnetworks/" + trained_lstm_selected, input_notes_seq, output_file_name)
         FluidSynth(os.getcwd() + "/static/lstm/generated_samples/PianoSoundfonts/" + "FullGrandPiano.sf2").midi_to_audio(
             output_file_name + ".mid", output_file_name + ".wav")
     except Exception as e:
-        note_selected = ""  # str(e)
+        input_notes_seq = ""  # str(e)
         output_file_name = ""
+    try:
+        clear = request.GET["clear"]
+    except:
+        clear = ""
     author = get_object_or_404(Author, pk=pk)
-    form = InputNoteForm()
     return render(request, 'author_generate.html',
                   {"author": author, "trained_lstm_selected": trained_lstm_selected,
-                   "note_selected": note_selected, "form": form, "output_wav": output_file_name[output_file_name.find("static")-1:] + ".wav"})
+                   "output_wav": output_file_name[output_file_name.find("static")-1:] + ".wav",
+                   "input_notes_seq": input_notes_seq, "clear": clear},)
 
 """from .models import LSTM, Samples
 

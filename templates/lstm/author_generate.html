@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-{% load static %}
+<!--{% load static %}
 <html>
 <head>
   <title>DL Music Generation - {{ author.name }} - {{ trained_lstm_selected }}</title>
-</head>
+</head>-->
 <!--<body style="background-image: url('{% static 'lstm/images/' %}{{ author.name }}_background.jpg')">-->
   <!--<img src="{% static 'lstm/images/' %}{{ author.name }}.jpg" /> <br>-->
-<body style="background-image: url('{% static 'lstm/images/author_background.jpeg' %}")>
+<!--<body style="background-image: url('{% static 'lstm/images/author_background.jpeg' %}")>
+
   <h1 style="font-family:Courier New;"> {{ author.name }} - {{ trained_lstm_selected }} </h1>
   <h2 style="font-family:Courier New;">Generate:</h2>
     <form method="get">
@@ -18,12 +19,16 @@
           <audio controls> <source src="{{ output_wav }}" type="audio/wav"> Audio not supported</audio>
     {% endif %}
   <a href="/"><h3 style="font-family:Courier New;">Home</h3></a>
-</body>
+</body>-->
 
 <!-- https://mczak.com/code/piano/ -->
-
-<!--<link type="text/css" rel="stylesheet" href="https://mczak.com/code/piano/assets/css/style.css">
-<ul class="piano">
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="https://mczak.com/code/piano/assets/css/style.css">
+</head>
+<body style="background-image: url('{% static 'lstm/images/author_background.jpeg' %}">
+<h1 style="font-family: 'Courier New'">To generate, play some notes with your keyboard and press submit!</h1>
+<ul class="piano" id="myList">
     <li class="key">
       <span class="white-key" data-key="20" data-note="1C"></span>
       <span class="black-key" data-key="81" data-note="1Cs"></span>
@@ -79,5 +84,23 @@
     <br>
     <span class="wlink"><a href="https://mczak.com/code/piano/">Piano for your Website</a></span>
   </ul>
+<form method="get" style="display: table; width: 100%;">
+    <input type="text" name="submitted" id="submitted" style="display: table-cell; width: 100%; font-family: Courier; font-size: xx-large;">
+    <button type="submit" class="btn btn-success" value="submitted" style="display: table-cell; border : solid 2px #ffffff; border-radius : 3px; moz-border-radius : 3px; font-size : 20px; color : #ffffff; padding : 1px 17px; background-color : #0a66c9; width: 10%; font-family: Courier;">Submit</button>
+</form>
+<form method="get" style="display: table; width: 100%;">
+    <input type="hidden" name="clear" value="clear">
+    <button type="submit" class="btn btn-success" value="clear" style="display: table-cell; border : solid 2px #ffffff; border-radius : 3px; moz-border-radius : 3px; font-size : 20px; color : #ffffff; padding : 1px 17px; background-color : #c70a36; width: 10%; font-family: Courier;">Clear</button>
+</form>
+{% if clear|length > 0 %}
+    <script>window.localStorage.clear()</script>
+{% endif %}
+{% if input_notes_seq|length > 0 %}
+    <h3 style="font-family:Courier New;">Success!</h3>
+        <audio controls> <source src="{{ output_wav }}" type="audio/wav"> Audio not supported</audio>
+{% endif %}
+    <!--<span id="inputSeq"></span>
+  <script>document.getElementById("inputSeq").innerHTML = window.localStorage.getItem("noteSeq"); window.localStorage.clear()</script>-->
 
-<script type="text/javascript" src="https://mczak.com/code/piano/assets/js/scripts.min.js"></script>-->
+<script type="text/javascript" src="{% static 'lstm/js/scripts.min.js' %}"></script>
+</body>
