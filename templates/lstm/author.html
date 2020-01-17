@@ -9,7 +9,7 @@
 <body style="background-image: url('{% static 'lstm/images/author_background.jpeg' %}")>
   <h1 style="font-family:Courier New;"> {{ author.name }} </h1>
   <form method="get">
-    {{ form }}
+    {{ form }} TODO: Customize (needs to do some special stuff for Django)
     <button type="submit" class="btn btn-success">Submit</button>
   </form>
   {% if samples|length > 0 %}
@@ -17,11 +17,11 @@
       <h2 style="font-family:Courier New;">Samples:</h2>
         <ul>
           {% for sample in samples %}
-            <li> <h3 style="font-family:Courier New;"> {{ sample }}</h3><audio controls> <source src="{% static 'lstm/audio/' %}{{ sample }}" type="audio/mp3"> Audio not supported</audio></li><br>
+            <!--<h3 style="font-family:Courier New;"> {{ sample }}</h3>--><audio controls> <source src="{% static 'lstm/audio/' %}{{ sample }}" type="audio/mp3"> Audio not supported</audio>
+              <br>
           {% endfor %}
         </ul>
-      <h2 style="font-family:Courier New;">Generate:</h2>
-  <span style="font-family:Courier New;"> To generate, click <a href="/author/{{ author.pk }}/{{ lstm_selected }}/">here</a> </span>
+      <a href="/author/{{ author.pk }}/{{ lstm_selected }}/" style="color:black"><h2 style="font-family:Courier New;">Generate</h2></a>
         <!--<form method="get">
           {{ note_form }}
           <button type="submit" class="btn btn-success">Submit</button>
@@ -30,11 +30,11 @@
     {% endif %}
   {% else %}
     <h2 style="font-family:Courier New;">No samples available :(</h2>
-      <h2 style="font-family:Courier New;">Generate:</h2>
-  <span style="font-family:Courier New;"> To generate, click <a href="/author/{{ author.pk }}/{{ lstm_selected }}/">here</a> </span>
+      <a href="/author/{{ author.pk }}/{{ lstm_selected }}/"><h2 style="font-family:Courier New;">Generate</h2></a>
   {% endif %}
   <br>
-  <a href="/"><h3 style="font-family:Courier New;">Home</h3></a>
+  <a href="/" style="color:black"><h3 style="font-family:Courier New;">Home</h3></a>
+  TODO: Style Generate and put Home at the bottom
 </body>
 
 <!-- https://mczak.com/code/piano/ -->

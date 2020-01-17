@@ -26,8 +26,8 @@
 <head>
 <link type="text/css" rel="stylesheet" href="https://mczak.com/code/piano/assets/css/style.css">
 </head>
-<body style="background-image: url('{% static 'lstm/images/author_background.jpeg' %}">
-<h1 style="font-family: 'Courier New'">To generate, play some notes with your keyboard and press submit!</h1>
+<body style="background-image: url('{% static 'lstm/images/generate_background.jpeg' %}">
+<!--<img src="{% static 'lstm/images/generate_up.jpeg' %}" alt="Generate Music" style="display: block; margin-left: auto; margin-right: auto; width: 50%;">-->
 <ul class="piano" id="myList">
     <li class="key">
       <span class="white-key" data-key="20" data-note="1C"></span>
@@ -85,22 +85,37 @@
     <span class="wlink"><a href="https://mczak.com/code/piano/">Piano for your Website</a></span>
   </ul>
 <form method="get" style="display: table; width: 100%;">
-    <input type="text" name="submitted" id="submitted" style="display: table-cell; width: 100%; font-family: Courier; font-size: xx-large;">
-    <button type="submit" class="btn btn-success" value="submitted" style="display: table-cell; border : solid 2px #ffffff; border-radius : 3px; moz-border-radius : 3px; font-size : 20px; color : #ffffff; padding : 1px 17px; background-color : #0a66c9; width: 10%; font-family: Courier;">Submit</button>
+    <input type="text" name="submitted" id="submitted" style="display: table-cell; width: 100%; font-family: Courier; font-size: xx-large; background-color:transparent">
+    {{ form_note_thres_right }} <br>
+    {{ form_note_thres_left }} <br>
+    {{ form_hold_thres_right }} <br>
+    {{ form_hold_thres_left }} <br>
+    {{ form_seq_len }} <br>
+    {{ form_n_steps }} <br>
+    {{ form_tempo }} <br>
+    <button type="submit" class="btn btn-success" value="submitted" style="display: table-cell; border : solid 2px #ffffff; border-radius : 3px; moz-border-radius : 3px; font-size : 20px; color : #ffffff; padding : 1px 17px; background-color : #0a66c9; width: 13%; font-family: Courier;">Generate</button>
 </form>
 <form method="get" style="display: table; width: 100%;">
     <input type="hidden" name="clear" value="clear">
-    <button type="submit" class="btn btn-success" value="clear" style="display: table-cell; border : solid 2px #ffffff; border-radius : 3px; moz-border-radius : 3px; font-size : 20px; color : #ffffff; padding : 1px 17px; background-color : #c70a36; width: 10%; font-family: Courier;">Clear</button>
+    <button type="submit" class="btn btn-success" value="clear" style="display: table-cell; border : solid 3px #ffffff; border-radius : 3px; moz-border-radius : 3px; font-size : 20px; color : #ffffff; padding : 1px 17px; background-color : #c70a36; width: 13%; font-family: Courier;">Clear/Stop</button>
 </form>
+TODO: Style forms
 {% if clear|length > 0 %}
     <script>window.localStorage.clear()</script>
 {% endif %}
+<br>
+{{ input_notes_seq }}
 {% if input_notes_seq|length > 0 %}
-    <h3 style="font-family:Courier New;">Success!</h3>
+    <h3 style="font-family:Courier New;">Generation complete:</h3>
         <audio controls> <source src="{{ output_wav }}" type="audio/wav"> Audio not supported</audio>
+        <br>
+        <a href="{% static 'lstm/generated_samples/' %}{{ output_mid_name }}" style="font-family:Courier; color:black;">Download MIDI</a>
 {% endif %}
+<span style="font-family:Courier;">If you are curious about what each option does, read </span><a href="/about" style="color:black"><span style="font-family:Courier;">here</span></a>
+<a href="/" style="color:black"><h3 style="font-family:Courier New;">Home</h3></a>
+  TODO: Style page and put Home at the bottom
     <!--<span id="inputSeq"></span>
   <script>document.getElementById("inputSeq").innerHTML = window.localStorage.getItem("noteSeq"); window.localStorage.clear()</script>-->
-
+TODO: Put something like generating... while it's generating
 <script type="text/javascript" src="{% static 'lstm/js/scripts.min.js' %}"></script>
 </body>

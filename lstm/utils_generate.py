@@ -9,7 +9,9 @@ from .utils_both_stacked import LSTMMusic, ltsm_gen
 # net, l, ll = train_lstm_loss_whole_seq(50, n_epochs=100, lr=0.01)
 # To save the model
 # torch.save(net.state_dict(), 'chopin_both_stacked.pkl')
-def generate_music(trained_lstm, input_notes_seq, file_name):
+def generate_music(trained_lstm, input_notes_seq, file_name,
+                   n_steps=300, hold_thres=[0.7, 0.7], note_thres=[0.9, 0.9],
+                   seq_len=50, tempo=74, both_hands=True):
 
     # Gets a NumPy array with all the frequency of the piano notes
     notes_freq = [ms.note.Note(note).pitch.frequency for note in ["A0", "A#0"]]
@@ -23,16 +25,21 @@ def generate_music(trained_lstm, input_notes_seq, file_name):
     input_notes_np = np.zeros((len(input_notes), 89))
     for i, input_note in enumerate(input_notes):
         input_note = input_note.replace("s", "#")
-        input_note = input_note[1:] + input_note[0]
+        input_note = input_note[1:] + input_note[0]  # TODO: Map numbers on both notations...!
         # Gets the note as a music21 object
-        input_note_ms = ms.note.Note(input_note)
+        input_note_ms = ms.note.Note(input_note, duration=ms.duration.Duration(0.25))
         input_notes_np[i, :87] += (notes_freq == input_note_ms.pitch.frequency)*1
 
-    input_notes_np_left = np.zeros((len(input_notes), 89))
-    input_notes_np = np.hstack((input_notes_np_left, input_notes_np))
+    if both_hands:
+        input_notes_np_left = np.zeros((len(input_notes), 89))
+        input_notes_np = np.hstack((input_notes_np_left, input_notes_np))
+        hidden_size = 178
+    else:
+        hidden_size = 89
 
-    net = LSTMMusic(178, 178)
+    net = LSTMMusic(hidden_size, hidden_size)
     net.load_state_dict(torch.load(trained_lstm, map_location=torch.device('cpu')))
     net.eval()
 
-    ltsm_gen(net, 50, file_name, torch.tensor(input_notes_np), time_step=0.25, n_steps=600)
+    ltsm_gen(net, file_name, torch.tensor(input_notes_np), time_step=0.25, n_steps=n_steps,
+             hold_thres=hold_thres, note_thres=note_thres, seq_len=seq_len, tempo=tempo)

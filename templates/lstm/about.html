@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>No, but really... how does it work?</title>
+</head>
+<body>
+    <h1> Main Concept </h1>
+    <p>
+        Alright, so you are curious how a computer can generate music, even do it with a particular style.
+        Well, welcome to the fascinating world of Artificial Neural Networks (ANNs), often simply called Artificial Intelligence (AI). And now is when I try to explain to you what an ANN is... nah, you can figure that stuff out all on your own :).
+        If you are really serious about it though, give <a href="TODO">this</a> a (long) read. You won't regret it. If. You. Like. Math.
+    </p>
+    <p>
+        For now, let's dive right in into Recurrent Neural Networks (RNNs). So, a TODO: Static? Neural Network is a mathematical "thing" that learns patterns present within stationary data.
+        For example, this kind of network can distinguish between pics of cats and dogs by learning some kind of pattern that the pixels of these pics follow. To do that, we train it by showing it labeled pics, which the network will try to classify, getting better and better because we are telling it whether it was right or wrong on each attempt.
+        Patterns in time, however, require a special kind of ANN called R(ecurrent)NN. It's called recurrent because we use the past outputs of the network as part of the present inputs, or directly as the only inputs. In the example above, the inputs were the pics and the outputs were either 0 (cats) or 1 (dogs) for each pic.
+    </p>
+    <p>
+        So then how would you go about training a RNN to generate music? Well, train it to learn a musical pattern, which can be thought of as a sequence of the probabilities of playing each note at each (discrete) moment in time! The network just needs to output the probability of playing each note, at each time step.
+        What is more, the current note (its probability) depends on the notes that came before. That's why we are using a Long Short Term Memory (TODO) Network (LSTM), which is a powerful type of RNN. We also incorporate probabilities for rests and "holds" (note duration), to achieve a more human-like music.
+    </p>
+    <p>
+        Ok, you got the main idea, but how do you train it to learn a musical pattern? Easy peasy TODO! (in theory at least :/): Take a bunch of songs, stack them together, and train the network to correctly predict each note based on a fixed number of previous notes.
+        This way, when generation time comes, you just need to input an initial sequence of notes and then let the network do its thing!
+        This is actually very similar to how Neural Language Models (think google translate) are pre-trained. I must say that this is kinda unfair to state-of-the-art Language Models, because nowadays they are doing much cooler stuff, but the main idea remains the same.
+    </p>
+    <p>
+        So, when you choose a particular composer, you will be using a network trained by us to predict each note of several songs written by this composer. This way the network kinda learns the musical style present in the songs, because it needs it to generate the songs! Makes sense, right? :)
+    </p>
+    <p>
+        And that's about it. If you really want to understand all the math and details, sorry about that. That takes more time :D.
+        You could try reading our <a href="https://github.com/PedroUria/DL-Music_Generation/blob/master/Final-Group-Presentation/Slides.pdf">presentation</a> and <a href="https://github.com/PedroUria/DL-Music_Generation/blob/master/Final-Group-Project-Report/Music-LSTM.pdf">report</a>, but you still need some basic Neural Network knowledge.
+        At least, this should be enough to understand the options available for generation. Oh, and by the way. We are not using audio as our input, we are using encoded notes from MIDI files.
+    </p>
+    <h1>Generative Options</h1>
+    TODO: Make bold or style better...
+    <ul>
+        <li><span style="font-style: bold;">Right Hand Notes Probability Threshold:</span> Note probabilities outputted by the network greater or equal than this number will mean those notes will be played.</li>
+        <li><span style="font-style: bold;">Left Hand Notes Probability Threshold:</span>  Idem for the left hand. The right hand is usually the melody and the left hand the harmony.</li>
+        <li><span style="font-style: bold;">Right Hand Hold Probability Threshold:</span>  Idem but for the hold. "Playing" a hold means that the currently played note/s will be held into the next time step.</li>
+        <li><span style="font-style: bold;">Left Hand Hold Probability Threshold:</span>  Idem. You can keeping pressing down the key on a piano of the currently played note/s.</li>
+        <li><span style="font-style: bold;">Input Sequence Length:</span>  The number of previous notes (actually MIDI events) that are used to predict the probabilities for the next time step.</li>
+        <li><span style="font-style: bold;">Notes to Generate: Number of MIDI events to generate.</li>
+        <li><span style="font-style: bold;">Tempo:</span>  TODO.</li>
+    </ul>
+    <a href="/" style="color:black"><h3 style="font-family:Courier New;">Home</h3></a>
+</body>
+</html>
