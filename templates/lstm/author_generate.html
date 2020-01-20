@@ -1,90 +1,80 @@
-<!DOCTYPE html>
-<!--{% load static %}
-<html>
-<head>
-  <title>DL Music Generation - {{ author.name }} - {{ trained_lstm_selected }}</title>
-</head>-->
-<!--<body style="background-image: url('{% static 'lstm/images/' %}{{ author.name }}_background.jpg')">-->
-  <!--<img src="{% static 'lstm/images/' %}{{ author.name }}.jpg" /> <br>-->
-<!--<body style="background-image: url('{% static 'lstm/images/author_background.jpeg' %}")>
-
-  <h1 style="font-family:Courier New;"> {{ author.name }} - {{ trained_lstm_selected }} </h1>
-  <h2 style="font-family:Courier New;">Generate:</h2>
-    <form method="get">
-      {{ form }}
-      <button type="submit" class="btn btn-success">Submit</button>
-    </form>
-    {% if note_selected|length > 0 %}
-        <h3 style="font-family:Courier New;">Success!</h3>
-          <audio controls> <source src="{{ output_wav }}" type="audio/wav"> Audio not supported</audio>
-    {% endif %}
-  <a href="/"><h3 style="font-family:Courier New;">Home</h3></a>
-</body>-->
-
+{% load static %}
 <!-- https://mczak.com/code/piano/ -->
+<!DOCTYPE html>
 <html>
 <head>
-<link type="text/css" rel="stylesheet" href="https://mczak.com/code/piano/assets/css/style.css">
+    <link type="text/css" rel="stylesheet" href="{% static 'lstm/css/style.css' %}">
 </head>
-<body style="background-image: url('{% static 'lstm/images/generate_background.jpeg' %}">
+<body style="background-size: cover; background-color: rgba(255, 255, 255, 0.2); background-blend-mode: lighten; background-image: url('{% static 'lstm/images/author_generate_background.jpeg' %}">
 <!--<img src="{% static 'lstm/images/generate_up.jpeg' %}" alt="Generate Music" style="display: block; margin-left: auto; margin-right: auto; width: 50%;">-->
 <ul class="piano" id="myList">
     <li class="key">
-      <span class="white-key" data-key="20" data-note="1C"></span>
-      <span class="black-key" data-key="81" data-note="1Cs"></span>
+      <span class="white-key" data-key="20" data-note="C3"></span>
+      <span class="black-key" data-key="81" data-note="C#3"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="65" data-note="1D"></span>
-      <span class="black-key" data-key="87" data-note="1Ds"></span>
+      <span class="white-key" data-key="65" data-note="D3"></span>
+      <span class="black-key" data-key="87" data-note="D#3"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="83" data-note="1E"></span>
+      <span class="white-key" data-key="83" data-note="E3"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="68" data-note="1F"></span>
-      <span class="black-key" data-key="82" data-note="1Fs"></span>
+      <span class="white-key" data-key="68" data-note="F3"></span>
+      <span class="black-key" data-key="82" data-note="F#3"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="70" data-note="1G"></span>
-      <span class="black-key" data-key="84" data-note="1Gs"></span>
+      <span class="white-key" data-key="70" data-note="G3"></span>
+      <span class="black-key" data-key="84" data-note="G#3"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="71" data-note="2A"></span>
-      <span class="black-key" data-key="89" data-note="2As"></span>
+      <span class="white-key" data-key="71" data-note="A3"></span>
+      <span class="black-key" data-key="89" data-note="A#3"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="72" data-note="2B"></span>
+      <span class="white-key" data-key="72" data-note="B3"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="74" data-note="2C"></span>
-      <span class="black-key" data-key="73" data-note="2Cs"></span>
+      <span class="white-key" data-key="74" data-note="C4"></span>
+      <span class="black-key" data-key="73" data-note="C#4"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="75" data-note="2D"></span>
-      <span class="black-key" data-key="79" data-note="2Ds"></span>
+      <span class="white-key" data-key="75" data-note="D4"></span>
+      <span class="black-key" data-key="79" data-note="D#4"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="76" data-note="2E"></span>
+      <span class="white-key" data-key="76" data-note="E4"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="186" data-note="2F"></span>
-      <span class="black-key" data-key="219" data-note="2Fs"></span>
+      <span class="white-key" data-key="186" data-note="F4"></span>
+      <span class="black-key" data-key="219" data-note="F#4"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="222" data-note="2G"></span>
-      <span class="black-key" data-key="221" data-note="2Gs"></span>
+      <span class="white-key" data-key="222" data-note="G4"></span>
+      <span class="black-key" data-key="221" data-note="G#4"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="220" data-note="3A"></span>
-      <span class="black-key" data-key="13" data-note="3As"></span>
+      <span class="white-key" data-key="220" data-note="A4"></span>
+      <span class="black-key" data-key="13" data-note="A#4"></span>
     </li>
     <li class="key">
-      <span class="white-key" data-key="37" data-note="3B"></span>
+      <span class="white-key" data-key="37" data-note="B4"></span>
     </li>
     <br>
-    <span class="wlink"><a href="https://mczak.com/code/piano/">Piano for your Website</a></span>
+    <span class="wlink"><a href="https://mczak.com/code/piano/" target="_blank">Piano for your Website</a></span>
   </ul>
-<form method="get" style="display: table; width: 100%;">
+<form method="get">
+    <input type="text" name="submitted" id="submitted" style="display: table-cell; width: 100%; font-family: Courier; font-size: xx-large; background-color:transparent">
+    <input type="range" min="0"  max="1" step="0.01" value="0.9" name="thres_note_selected_right" id="thres_note_selected_right"> Right Hand Notes Probability Threshold: <span id="demo0"></span><br></label>
+    <input type="range" min="0"  max="1" step="0.01" value="0.9" name="thres_note_selected_left" id="thres_note_selected_left"> Left Hand Notes Probability Threshold: <span id="demo1"></span><br>
+    <input type="range" min="0"  max="1" step="0.01" value="0.7" name="thres_hold_selected_right" id="thres_hold_selected_right"> Right Hand Hold Probability Threshold: <span id="demo2"></span><br>
+    <input type="range" min="0"  max="1" step="0.01" value="0.7" name="thres_hold_selected_left" id="thres_hold_selected_left"> Left Hand Hold Probability Threshold: <span id="demo3"></span><br>
+    <input type="range" min="1"  max="300" step="1" value="50" name="seq_len_selected" id="seq_len_selected"> Input Sequence Length: <span id="demo4"></span><br>
+    <input type="range" min="1"  max="3000" step="1" value="300" name="n_steps_selected" id="n_steps_selected"> Notes to Generate: <span id="demo5"></span><br>
+    <input type="range" min="1"  max="120" step="1" value="74" name="tempo_selected" id="tempo_selected"> Tempo: <span id="demo6"></span><br>
+    <button type="submit" class="btn btn-success" value="submitted" style="display: table-cell; border : solid 1px #ffffff; border-radius : 3px; moz-border-radius : 3px; font-size : 20px; color : #ffffff; padding : 1px 17px; background-color : #0a66c9; width: 13%; font-family: Courier;">Generate</button>
+</form>
+<!--<form method="get">
     <input type="text" name="submitted" id="submitted" style="display: table-cell; width: 100%; font-family: Courier; font-size: xx-large; background-color:transparent">
     {{ form_note_thres_right }} <br>
     {{ form_note_thres_left }} <br>
@@ -94,28 +84,26 @@
     {{ form_n_steps }} <br>
     {{ form_tempo }} <br>
     <button type="submit" class="btn btn-success" value="submitted" style="display: table-cell; border : solid 2px #ffffff; border-radius : 3px; moz-border-radius : 3px; font-size : 20px; color : #ffffff; padding : 1px 17px; background-color : #0a66c9; width: 13%; font-family: Courier;">Generate</button>
-</form>
-<form method="get" style="display: table; width: 100%;">
+</form>-->
+<form method="get">
     <input type="hidden" name="clear" value="clear">
-    <button type="submit" class="btn btn-success" value="clear" style="display: table-cell; border : solid 3px #ffffff; border-radius : 3px; moz-border-radius : 3px; font-size : 20px; color : #ffffff; padding : 1px 17px; background-color : #c70a36; width: 13%; font-family: Courier;">Clear/Stop</button>
+    <button type="submit" class="btn btn-success" value="clear" style="display: table-cell; border : solid 1px #ffffff; border-radius : 3px; moz-border-radius : 3px; font-size : 20px; color : #ffffff; padding : 1px 17px; background-color : #c70a36; width: 13%; font-family: Courier;">Clear/Stop</button>
 </form>
-TODO: Style forms
 {% if clear|length > 0 %}
     <script>window.localStorage.clear()</script>
 {% endif %}
 <br>
-{{ input_notes_seq }}
-{% if input_notes_seq|length > 0 %}
-    <h3 style="font-family:Courier New;">Generation complete:</h3>
-        <audio controls> <source src="{{ output_wav }}" type="audio/wav"> Audio not supported</audio>
-        <br>
-        <a href="{% static 'lstm/generated_samples/' %}{{ output_mid_name }}" style="font-family:Courier; color:black;">Download MIDI</a>
+{% if error_msg|length > 0 %}
+    <span class="text">There has been an error :( - {{ error_msg }}.</span><br><br>
 {% endif %}
-<span style="font-family:Courier;">If you are curious about what each option does, read </span><a href="/about" style="color:black"><span style="font-family:Courier;">here</span></a>
-<a href="/" style="color:black"><h3 style="font-family:Courier New;">Home</h3></a>
-  TODO: Style page and put Home at the bottom
-    <!--<span id="inputSeq"></span>
-  <script>document.getElementById("inputSeq").innerHTML = window.localStorage.getItem("noteSeq"); window.localStorage.clear()</script>-->
-TODO: Put something like generating... while it's generating
+{% if input_notes_seq|length > 0 %}
+    <script></script>
+    <h3>Generation complete:</h3>
+    <audio controls id="mywav"> <source src="{% static 'lstm/generated_samples/' %}{{ output_wav }}" type="audio/wav"> Audio not supported</audio><br>
+    <a href="{% static 'lstm/generated_samples/' %}{{ output_mid_name }}" style="font-family:Courier; color:black;">Download MIDI</a><br><br>
+{% endif %}
+<span class="text">If you are curious about what each option does, read </span><a href="/about" target="_blank"><span class="text">this</span></a><span class="text">.</span><br>
+<span class="text">Use your keyboard to play the piano or <a href="https://mypianonotes.com/" target="_blank">copy-paste</a> using letter notation. A = A4, B = B4, etc.</span><br><br>
+<a href="/"><h3>Home</h3></a>
 <script type="text/javascript" src="{% static 'lstm/js/scripts.min.js' %}"></script>
 </body>

@@ -25,7 +25,7 @@ SECRET_KEY = '@k#+@%8i=8$c$mv@-6!h483_z%$r*uafc%k*a+vk_n1q6yh$-+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -127,18 +127,18 @@ STATICFILES_DIRS = (
 
 # Deployment:  https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-from decouple import config, Csv
-import dj_database_url
-
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
-DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
-}
-
-STATIC_ROOT = "/static/"
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# from decouple import config, Csv
+# import dj_database_url
+#
+# SECRET_KEY = config('SECRET_KEY')
+# DEBUG = config('DEBUG', default=False, cast=bool)
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=config('DATABASE_URL')
+#     )
+# }
+#
+# STATIC_ROOT = "/static/"
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True

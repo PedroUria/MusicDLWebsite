@@ -1,0 +1,105 @@
+adduser pedro
+usermod -aG sudo pedro
+
+sudo su -- pedro
+
+sudo apt-get update
+sudo apt-get upgrade
+
+sudo apt install python3-pip
+sudo -H pip3 install virtualenv
+cd ~
+On local terminal: scp -i ~/.ssh/musicwebsite musicdl.zip root@45.79.26.100:///home/pedro/musicdl.zip
+sudo apt install unzip
+unzip musicdl.zip
+sudo rm musicdl.zip
+cd musicdl/
+mkdir temp
+mv -v * temp
+mv temp/ musicdl/
+
+virtualenv venv
+source venv/bin/activate
+nano musicdl/requirements.txt --> remove torch
+pip install -r musicdl/requirements.txt
+pip install https://download.pytorch.org/whl/cpu/torch-0.4.1-cp36-cp36m-linux_x86_64.whl
+
+nano .env --> add * to ALLOWED_HOSTS  # This was later changed because I decided not to use .env and fancy stuff xD
+python musicdl/manage.py migrate
+python musicdl/manage.py runserver 0.0.0.0:8000
+Go to 45.79.26.100:8000
+It seems that there is a problem with the database, so need to add the authors again manually :/
+To do that, first remove everything below # Deployment:  https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/ in settings.py and do ALLOWED_HOSTS = ["www.li1125-100.members.linode.com", "www.lstmmusic.com"]
+Then, create and admin, log in and add the stuff
+
+I also messed up the paths, so in views.py I need to use "/musicdl/static/..." instead of just "/static/..."
+
+sudo apt-get install -y fluidsynth
+
+Now everything should run remotelly. Time to put it on the internet!
+
+deactivate
+
+sudo -H pip3 install uwsgi==2.0.17
+uwsgi --version
+
+cd ~
+mkdir uwsgi
+cd uwsgi
+mkdir sites
+cd sites
+nano musicdl.ini
+
+[uwsgi]
+home = /home/pedro/musicdl/venv
+chdir = /home/pedro/musicdl/musicdl
+wsgi-file = /home/pedro/musicdl/musicdl/musicdl/wsgi.py
+
+socket = /home/pedro/uwsgi/musicdl.sock
+vacuum = true
+chown-socket = pedro:www-data
+chmod-socket = 660
+
+cd /etc/systemd/system/
+sudo nano uwsgi.service
+
+[Unit]
+Description=uWSGI Emperor service
+
+[Service]
+ExecStartPre=/bin/bash -c "mkdir -p /run/uwsgi; chown pedro:www-data /run/uwsgi"
+ExecStart=/usr/local/bin/uwsgi --emperor /home/pedro/uwsgi/sites
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
+
+sudo apt-get install nginx
+sudo nginx -v
+
+cd /etc/nginx/sites-available
+sudo nano musicdl
+server {
+    listen 80;
+    server_name li1125-100.members.linode.com www.li1125-100.members.linode.com;
+    location /static/ {
+        alias /home/pedro/musicdl/musicdl/assets/;
+    }
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/home/pedro/uwsgi/musicdl.sock;
+    }
+}
+sudo ln -s /etc/nginx/sites-available/musicdl /etc/nginx/sites-enabled
+sudo nginx -t
+sudo systemctl enable nginx
+sudo systemctl enable uwsgi
+sudo ufw allow 'Nginx Full'
+sudo reboot
+Go to http://li1125-100.members.linode.com
+
+To solve problems with static files, add STATIC_ROOT = os.path.join(BASE_DIR, 'assets') to settings.py and run python manage.py collectstatic, and on views.py and html templates need to make it work too with assets dir.
+

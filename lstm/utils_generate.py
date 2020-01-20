@@ -21,14 +21,15 @@ def generate_music(trained_lstm, input_notes_seq, file_name,
     notes_freq.append(ms.note.Note("C8").pitch.frequency)
     notes_freq = np.array(notes_freq)
 
-    input_notes = input_notes_seq.split("-")[:-1]
+    # TODO: Include support for chords (if copy-pasting from somewhere)
+    input_notes = input_notes_seq.split(" ")
     input_notes_np = np.zeros((len(input_notes), 89))
     for i, input_note in enumerate(input_notes):
-        input_note = input_note.replace("s", "#")
-        input_note = input_note[1:] + input_note[0]  # TODO: Map numbers on both notations...!
         # Gets the note as a music21 object
-        input_note_ms = ms.note.Note(input_note, duration=ms.duration.Duration(0.25))
-        input_notes_np[i, :87] += (notes_freq == input_note_ms.pitch.frequency)*1
+        if input_note:
+            # input_note = input_note.replace("3", "1").replace("4", "8")
+            input_note_ms = ms.note.Note(input_note, duration=ms.duration.Duration(0.25))
+            input_notes_np[i, :87] += (notes_freq == input_note_ms.pitch.frequency)*1
 
     if both_hands:
         input_notes_np_left = np.zeros((len(input_notes), 89))

@@ -8,8 +8,8 @@
   <!--<img src="{% static 'lstm/images/' %}{{ author.name }}.jpg" /> <br>-->
 <body style="background-image: url('{% static 'lstm/images/author_background.jpeg' %}")>
   <h1 style="font-family:Courier New;"> {{ author.name }} </h1>
-  <form method="get">
-    {{ form }} TODO: Customize (needs to do some special stuff for Django)
+  <form method="get" style="font-family: Courier;">
+    {{ form }}
     <button type="submit" class="btn btn-success">Submit</button>
   </form>
   {% if samples|length > 0 %}
@@ -33,8 +33,7 @@
       <a href="/author/{{ author.pk }}/{{ lstm_selected }}/"><h2 style="font-family:Courier New;">Generate</h2></a>
   {% endif %}
   <br>
-  <a href="/" style="color:black"><h3 style="font-family:Courier New;">Home</h3></a>
-  TODO: Style Generate and put Home at the bottom
+  <a href="/" style="color:black; position: fixed; bottom: 0;"><h3 style="font-family:Courier New; font-style: italic;">Home</h3></a>
 </body>
 
 <!-- https://mczak.com/code/piano/ -->
